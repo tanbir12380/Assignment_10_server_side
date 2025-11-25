@@ -50,6 +50,12 @@ async function run() {
       res.send(values);
     });
 
+    app.get("/mybills", async (req, res) => {
+      const cursor = userCollection2.find({});
+      const values = await cursor.toArray();
+      res.send(values);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
