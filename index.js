@@ -56,6 +56,13 @@ async function run() {
       res.send(values);
     });
 
+    app.get("/mybills/:email", async (req, res) => {
+      const emailId = req.params.email;
+      const query = { email: emailId };
+      const result = await userCollection2.findOne(query);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
