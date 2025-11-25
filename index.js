@@ -63,6 +63,13 @@ async function run() {
       res.send(result);
     });
 
+    app.post("/mybills", async (req, res) => {
+      const ourData = req.body;
+      console.log("bill info", ourData);
+      const result = await userCollection2.insertOne(ourData);
+      res.send(result);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
