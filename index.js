@@ -44,6 +44,12 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/recentbills", async (req, res) => {
+      const cursor = userCollection1.find({}).sort({ date: -1 }).limit(6);
+      const values = await cursor.toArray();
+      res.send(values);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
