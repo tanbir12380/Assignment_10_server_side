@@ -31,6 +31,12 @@ async function run() {
     const userCollection1 = userDB.collection("AllBills");
     const userCollection2 = userDB.collection("BillsPaid");
 
+    app.get("/bills", async (req, res) => {
+      const cursor = userCollection1.find({});
+      const values = await cursor.toArray();
+      res.send(values);
+    });
+
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
     console.log(
