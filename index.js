@@ -1,6 +1,6 @@
 const express = require("express");
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 const cors = require("cors");
 require("dotenv").config();
 app.use(cors());
@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 async function run() {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    // await client.connect();
 
     const userDB = client.db("Utility");
     const userCollection1 = userDB.collection("AllBills");
@@ -44,6 +44,14 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/billsCategory/:category", async (req, res) => {
+      const category1 = req.params.category;
+      const query = { category: category1 };
+      const cursor = userCollection1.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
     app.get("/recentbills", async (req, res) => {
       const cursor = userCollection1.find({}).sort({ date: -1 }).limit(6);
       const values = await cursor.toArray();
@@ -59,13 +67,13 @@ async function run() {
     app.get("/mybills/:email", async (req, res) => {
       const emailId = req.params.email;
       const query = { email: emailId };
-      const result = await userCollection2.findOne(query);
+      const cursor = userCollection2.find(query);
+      const result = await cursor.toArray();
       res.send(result);
     });
 
     app.post("/mybills", async (req, res) => {
       const ourData = req.body;
-      console.log("bill info", ourData);
       const result = await userCollection2.insertOne(ourData);
       res.send(result);
     });
@@ -103,11 +111,8 @@ async function run() {
       res.send(result);
     });
 
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
+    //  Send a ping to confirm a successful connection
+    // await client.db("admin").command({ ping: 1 });
   } finally {
   }
 }
